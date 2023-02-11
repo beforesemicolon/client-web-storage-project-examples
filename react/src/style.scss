@@ -1,0 +1,75 @@
+body {
+  font-size: 16px;
+  font-family: sans-serif;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-family: serif;
+  margin-top: 0;
+}
+
+p {
+  font-family: sans-serif;
+}
+
+button,
+.btn {
+  all: unset;
+  padding: 12px 25px;
+  background-color: #222;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 3px;
+  text-transform: capitalize;
+  letter-spacing: 0.05rem;
+  font-weight: 300;
+
+  &.outline {
+    background: none;
+    color: #222;
+    border: 1px solid #222;
+    font-weight: 500;
+  }
+
+  &.cta {
+    background-color: rgb(16, 238, 153);
+    color: #222;
+    font-weight: 500;
+  }
+
+  &.sm,
+  &.small {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+.app-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  border-top: 1px solid #ccc;
+  padding: 10px 5px 0;
+}
+
+.list-container {
+  .todos-section-title {
+    border-bottom: 1px solid #ddd;
+    font-size: 1.2rem;
+    background-color: #c6fff1;
+    padding: 5px;
+    letter-spacing: 0.05rem;
+  }
+}

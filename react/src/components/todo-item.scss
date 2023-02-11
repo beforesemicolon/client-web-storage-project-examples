@@ -1,0 +1,64 @@
+%edit-itcon {
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/OOjs_UI_icon_edit-ltr.svg/2048px-OOjs_UI_icon_edit-ltr.svg.png")
+      0 0 / 100% no-repeat;
+    margin-left: 5px;
+    display: none;
+  }
+
+  &:hover::after {
+    display: inline-block;
+  }
+}
+
+.todo-item {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+
+  h3 {
+    margin-bottom: 10px;
+
+    span {
+      @extend %edit-itcon;
+    }
+
+    .status {
+      color: #222;
+      background-color: rgb(27, 255, 217);
+      padding: 5px 8px;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      letter-spacing: 0.03rem;
+      margin-right: 10px;
+
+      &.deleted {
+        background-color: rgb(255, 27, 46);
+        color: #fff;
+      }
+
+      &.in-progress {
+        background-color: rgb(255, 175, 27);
+      }
+    }
+  }
+
+  .description {
+    color: #444;
+    font-size: 0.8rem;
+    @extend %edit-itcon;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    border-top: 1px solid #ccc;
+    padding: 10px 5px 0;
+  }
+}

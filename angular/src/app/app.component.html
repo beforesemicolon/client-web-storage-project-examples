@@ -1,0 +1,51 @@
+<div>
+  <header>
+    <h1>Todo Management App</h1>
+    <div class="app-actions" *ngIf="hasTodos">
+      <input
+        type="search"
+        placeholder="Search..."
+        [ngModel]="searchTerm"
+        (ngModelChange)="updateSearchTerm($event)"
+      />
+      <button type="button" (click)="createTodo()" class="btn sm">
+        Create
+      </button>
+    </div>
+  </header>
+  <hr />
+  <main class="list-container">
+    <!-- Blank status -->
+    <ng-container *ngIf="!hasTodos">
+      <p *ngIf="searchTerm.length">No items matched "{{ searchTerm }}"</p>
+      <div *ngIf="!searchTerm.length" class="blank-status">
+        <p>No Todo Items Yet!</p>
+        <button type="button" (click)="createTodo()" class="cta">
+          Create Todo
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- Active Todos -->
+    <ng-container *ngIf="todoItems.active.length">
+      <h2 class="todos-section-title">
+        Active Todos ({{ todoItems.active.length }})
+      </h2>
+      <todo-item
+        *ngFor="let todo of todoItems.active"
+        [todo]="todo"
+      ></todo-item>
+    </ng-container>
+
+    <!-- Inactive Todos -->
+    <ng-container *ngIf="todoItems.inactive.length">
+      <h2 class="todos-section-title">
+        Deleted Todos ({{ todoItems.inactive.length }})
+      </h2>
+      <todo-item
+        *ngFor="let todo of todoItems.inactive"
+        [todo]="todo"
+      ></todo-item>
+    </ng-container>
+  </main>
+</div>

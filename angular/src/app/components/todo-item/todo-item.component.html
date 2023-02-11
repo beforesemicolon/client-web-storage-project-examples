@@ -1,0 +1,43 @@
+<div class="todo-item">
+  <h3>
+    <strong [class]="'status ' + statusCls ">{{statusLabel}}</strong>
+    <span (click)="editName()">
+      {{todo.name}}
+    </span>
+  </h3>
+  <p class="description" (click)="editDescription()">
+    {{todo.description}}
+  </p>
+  <div class="actions">
+    <ng-container *ngIf="deleted">
+      <button
+        *ngIf="deleted"
+        type="button"
+        (click)="markTodoDeleted()"
+        class="btn sm outline"
+      >
+        Restore
+      </button>
+      <button
+        *ngIf="deleted"
+        type="button"
+        (click)="restoreTodo()"
+        class="btn sm outline"
+      >
+        Permanently Delete
+      </button>
+    </ng-container>
+    <ng-container *ngIf="!deleted">
+      <button type="button" (click)="completeTodo()" class="btn sm cta">
+        {{completed ? 'Move in Progress' : 'Mark as Done'}}
+      </button>
+      <button
+        type="button"
+        (click)="deleteTodo()"
+        class="btn sm outline"
+      >
+        Delete
+      </button>
+    </ng-container>
+  </div>
+</div>
