@@ -18,7 +18,7 @@
     "@angular/platform-browser": "^15.1.0",
     "@angular/platform-browser-dynamic": "^15.1.0",
     "@angular/router": "^15.1.0",
-    "client-web-storage": "file:../../@beforesemicolon/client-web-storage/client-web-storage-1.6.5-next.tgz",
+    "client-web-storage": "^1.6.7-next",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
