@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Fragment } from 'react';
-import { todoStore } from '../stores/todo.store';
 import { Todo, TodoStatus } from '../service/todo.service';
 import { promptInput, confirmAction } from '../utils';
 import './todo-item.scss';
+import {useClientStore} from "client-web-storage/helpers/use-client-store";
+import {StoreNames} from "../stores";
 
 export interface TodoItemProps {
   todo: Todo;
@@ -11,10 +12,11 @@ export interface TodoItemProps {
 
 /**
  * the TodoItem is free to interact with the store which will trigger
- * the rigth API calls and data update focusing only the business logic
+ * the right API calls and data update focusing only the business logic
  * related to the UI rather than working with data and API inside the component
  */
 export const TodoItem = ({ todo }: TodoItemProps) => {
+  const todoStore = useClientStore<Todo>(StoreNames.Todo);
   const completed = todo.status === TodoStatus.Completed;
   const deleted = todo.status === TodoStatus.Deleted;
   const statusLabel = completed

@@ -1,8 +1,9 @@
 import {ClientStore, EventType, SchemaId, StorageType,} from 'client-web-storage';
 import {Todo, todoService, TodoStatus} from '../service/todo.service';
+import {StoreNames} from "./store-names";
 
 export const todoStore = new ClientStore<Todo>(
-  'todo',
+  StoreNames.Todo,
   {
     // schema
     id: SchemaId,

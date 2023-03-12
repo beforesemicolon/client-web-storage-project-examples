@@ -1,29 +1,25 @@
 import * as React from 'react';
-import {useState, ChangeEvent} from 'react';
+import {ChangeEvent} from 'react';
 import FlatList from 'flatlist-react';
 import {useClientStore} from 'client-web-storage/helpers/use-client-store';
-import {todoStore} from './stores/todo.store';
+import {useAppState} from 'client-web-storage/helpers/use-app-state';
 import {Todo, TodoStatus} from './service/todo.service';
 import {promptInput} from './utils';
 import {TodoItem} from './components/todo-item';
 import './style.scss';
+import {StoreNames} from "./stores";
+import {AppStateNames, AppStateType} from "./states";
 
 export default function App() {
 	// simply connect to your store with "useClientStore" hook
 	// it will return the store state object to work with
-	const {items, error, loadingItems} = useClientStore<Todo>(todoStore);
-	const [searchTerm, setSearchTerm] = useState('');
-	
-	if (error) {
-		return <div className="error-message">{error.message}</div>;
-	}
-	
-	if (loadingItems) {
-		return <div className="loading-indicator">Loading...</div>;
-	}
+	const todoStore = useClientStore<Todo>(StoreNames.Todo);
+	const {state, setState} = useAppState<AppStateType>(AppStateNames.App);
 	
 	const updateSearchTerm = (event: ChangeEvent<HTMLInputElement>) => {
-		setSearchTerm(event.target.value);
+		setState({
+			searchTerm: event.target.value
+		});
 	};
 	
 	const createTodo = async () => {
@@ -48,8 +44,16 @@ export default function App() {
 	const renderTodo = (todo: Todo) => <TodoItem todo={todo} key={todo.id}/>;
 	
 	const renderBlank = () => {
-		if (searchTerm) {
-			return <p>No items matched "{searchTerm}"</p>;
+		if (todoStore.error) {
+			return <div className="error-message">{todoStore.error.message}</div>;
+		}
+		
+		if (todoStore.loadingItems) {
+			return <div className="loading-indicator">Loading...</div>;
+		}
+		
+		if (state.searchTerm) {
+			return <p>No items matched "{state.searchTerm}"</p>;
 		}
 		
 		return (
@@ -66,12 +70,12 @@ export default function App() {
 		<div>
 			<header>
 				<h1>Todo Management App</h1>
-				{items.length ? (
+				{todoStore.items.length ? (
 					<div className="app-actions">
 						<input
 							type="search"
 							placeholder="Search..."
-							value={searchTerm}
+							value={state.searchTerm}
 							onChange={updateSearchTerm}
 						/>
 						<button type="button" onClick={createTodo} className="btn sm">
@@ -86,7 +90,7 @@ export default function App() {
 			<main className="list-container">
 				{/* FlatList is a swiss knife of handling lists with many useful operations which saves us time */}
 				<FlatList
-					list={items}
+					list={todoStore.items}
 					renderItem={renderTodo}
 					renderWhenEmpty={renderBlank}
 					display={{
@@ -94,7 +98,7 @@ export default function App() {
 						rowGap: '20px'
 					}}
 					search={{
-						term: searchTerm,
+						term: state.searchTerm,
 						by: ['name', 'description'],
 						caseInsensitive: true,
 						minCharactersCount: 2
