@@ -34,6 +34,12 @@
       <todo-item
         *ngFor="let todo of todoItems.active"
         [todo]="todo"
+        (completeTodo)="completeTodo(todo.id, todo.status === 1)"
+        (deleteTodo)="deleteTodo(todo.id, todo.name)"
+        (markTodoDeleted)="markTodoDeleted(todo.id)"
+        (editName)="editName(todo.id, todo.name)"
+        (editDescription)="editDescription(todo.id, todo.description)"
+        (restoreTodo)="restoreTodo(todo.id)"
       ></todo-item>
     </ng-container>
 

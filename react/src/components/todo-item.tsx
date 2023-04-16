@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { Fragment } from 'react';
-import { Todo, TodoStatus } from '../service/todo.service';
-import { promptInput, confirmAction } from '../utils';
+import {Fragment} from 'react';
+import {Todo, TodoStatus} from '../service/todo.service';
 import './todo-item.scss';
-import {useClientStore} from "client-web-storage/helpers/use-client-store";
-import {StoreNames} from "../stores";
 
 export interface TodoItemProps {
   todo: Todo;
+  onEditName: () => void,
+  onEditDescription: () => void,
+  onRestoreTodo: () => void,
+  onDeleteTodo: () => void,
+  onCompleteTodo: () => void,
+  onMarkTodoDeleted: () => void
 }
 
 /**
@@ -15,8 +18,7 @@ export interface TodoItemProps {
  * the right API calls and data update focusing only the business logic
  * related to the UI rather than working with data and API inside the component
  */
-export const TodoItem = ({ todo }: TodoItemProps) => {
-  const todoStore = useClientStore<Todo>(StoreNames.Todo);
+export const TodoItem = ({ todo, onEditName, onEditDescription, onRestoreTodo, onDeleteTodo, onCompleteTodo, onMarkTodoDeleted }: TodoItemProps) => {
   const completed = todo.status === TodoStatus.Completed;
   const deleted = todo.status === TodoStatus.Deleted;
   const statusLabel = completed
@@ -30,63 +32,15 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
     ? 'deleted'
     : 'in-progress';
 
-  const completeTodo = () => {
-    todoStore.updateItem(todo.id, {
-      status: completed ? TodoStatus.InProgress : TodoStatus.Completed,
-    });
-  };
-
-  const markTodoDeleted = () => {
-    todoStore.updateItem(todo.id, {
-      status: TodoStatus.Deleted,
-    });
-  };
-  
-  const deleteTodo = () => {
-    const confirmed = confirmAction(
-      `Are you sure you want to permanently delete "${todo.name}" todo? This action cannot be reverted!`
-    );
-    
-    if (confirmed) {
-      todoStore.removeItem(todo.id);
-    }
-  };
-
-  const restoreTodo = () => {
-    todoStore.updateItem(todo.id, {
-      status: TodoStatus.InProgress,
-    });
-  };
-
-  const editName = () => {
-    const newName = promptInput('Update name', todo.name);
-
-    if (newName && newName.trim().length) {
-      todoStore.updateItem(todo.id, {
-        name: newName,
-      });
-    }
-  };
-
-  const editDescription = () => {
-    const newDescription = promptInput('Update Description', todo.description);
-
-    if (newDescription && newDescription.trim().length) {
-      todoStore.updateItem(todo.id, {
-        description: newDescription,
-      });
-    }
-  };
-
   return (
     <div className="todo-item">
       <h3>
         <strong className={`status ${statusCls}`}>{statusLabel}</strong>
-        <span onClick={editName}>
+        <span onClick={onEditName}>
           {todo.name}
         </span>
       </h3>
-      <p className="description" onClick={editDescription}>
+      <p className="description" onClick={onEditDescription}>
         {todo.description}
       </p>
       <div className="actions">
@@ -94,14 +48,14 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
           <Fragment>
             <button
               type="button"
-              onClick={restoreTodo}
+              onClick={onRestoreTodo}
               className="btn sm"
             >
               Restore
             </button>
             <button
               type="button"
-              onClick={deleteTodo}
+              onClick={onDeleteTodo}
               className="btn sm outline"
             >
               Delete Permanently
@@ -109,12 +63,12 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
           </Fragment>
         ) : (
           <Fragment>
-            <button type="button" onClick={completeTodo} className="btn sm cta">
+            <button type="button" onClick={onCompleteTodo} className="btn sm cta">
               {completed ? 'Move in Progress' : 'Mark as Done'}
             </button>
             <button
               type="button"
-              onClick={markTodoDeleted}
+              onClick={onMarkTodoDeleted}
               className="btn sm outline"
             >
               Delete

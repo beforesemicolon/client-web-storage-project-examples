@@ -1,11 +1,11 @@
 <div class="todo-item">
   <h3>
     <strong [class]="'status ' + statusCls ">{{statusLabel}}</strong>
-    <span (click)="editName()">
+    <span (click)="editName.emit()">
       {{todo.name}}
     </span>
   </h3>
-  <p class="description" (click)="editDescription()">
+  <p class="description" (click)="editDescription.emit()">
     {{todo.description}}
   </p>
   <div class="actions">
@@ -13,7 +13,7 @@
       <button
         *ngIf="deleted"
         type="button"
-        (click)="markTodoDeleted()"
+        (click)="markTodoDeleted.emit()"
         class="btn sm outline"
       >
         Restore
@@ -21,19 +21,19 @@
       <button
         *ngIf="deleted"
         type="button"
-        (click)="restoreTodo()"
+        (click)="restoreTodo.emit()"
         class="btn sm outline"
       >
         Permanently Delete
       </button>
     </ng-container>
     <ng-container *ngIf="!deleted">
-      <button type="button" (click)="completeTodo()" class="btn sm cta">
+      <button type="button" (click)="completeTodo.emit()" class="btn sm cta">
         {{completed ? 'Move in Progress' : 'Mark as Done'}}
       </button>
       <button
         type="button"
-        (click)="deleteTodo()"
+        (click)="deleteTodo.emit()"
         class="btn sm outline"
       >
         Delete

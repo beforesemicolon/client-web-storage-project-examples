@@ -4,7 +4,7 @@ import FlatList from 'flatlist-react';
 import {useClientStore} from 'client-web-storage/helpers/use-client-store';
 import {useAppState} from 'client-web-storage/helpers/use-app-state';
 import {Todo, TodoStatus} from './service/todo.service';
-import {promptInput} from './utils';
+import {confirmAction, promptInput} from './utils';
 import {TodoItem} from './components/todo-item';
 import './style.scss';
 import {StoreNames} from "./stores";
@@ -41,7 +41,64 @@ export default function App() {
 		}
 	};
 	
-	const renderTodo = (todo: Todo) => <TodoItem todo={todo} key={todo.id}/>;
+	const completeTodo = (todoId: string, completed: boolean) => {
+		todoStore.updateItem(todoId, {
+			status: completed ? TodoStatus.InProgress : TodoStatus.Completed,
+		});
+	};
+	
+	const markTodoDeleted = (todoId: string) => {
+		todoStore.updateItem(todoId, {
+			status: TodoStatus.Deleted,
+		});
+	};
+	
+	const deleteTodo = (todoId: string, todoName: string) => {
+		const confirmed = confirmAction(
+			`Are you sure you want to permanently delete "${todoName}" todo? This action cannot be reverted!`
+		);
+		
+		if (confirmed) {
+			todoStore.removeItem(todoId);
+		}
+	};
+	
+	const restoreTodo = (todoId: string) => {
+		todoStore.updateItem(todoId, {
+			status: TodoStatus.InProgress,
+		});
+	};
+	
+	const editName = (todoId: string, todoName: string) => {
+		const newName = promptInput('Update name', todoName);
+		
+		if (newName && newName.trim().length) {
+			todoStore.updateItem(todoId, {
+				name: newName,
+			});
+		}
+	};
+	
+	const editDescription = (todoId: string, todoDescription: string) => {
+		const newDescription = promptInput('Update Description', todoDescription);
+		
+		if (newDescription && newDescription.trim().length) {
+			todoStore.updateItem(todoId, {
+				description: newDescription,
+			});
+		}
+	};
+	
+	const renderTodo = (todo: Todo) => (
+		<TodoItem todo={todo} key={todo.id}
+		          onCompleteTodo={() => completeTodo(todo.id, todo.status === TodoStatus.Completed)}
+		          onMarkTodoDeleted={() => markTodoDeleted(todo.id)}
+		          onDeleteTodo={() => deleteTodo(todo.id, todo.name)}
+		          onRestoreTodo={() => restoreTodo(todo.id)}
+		          onEditName={() => editName(todo.id, todo.name)}
+		          onEditDescription={() => editDescription(todo.id, todo.description)}
+		/>
+	);
 	
 	const renderBlank = () => {
 		if (todoStore.error) {
