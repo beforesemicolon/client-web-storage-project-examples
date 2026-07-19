@@ -1,0 +1,57 @@
+name: Regenerate Angular socket.io-parser security lockfile
+
+on:
+  push:
+    branches:
+      - automation/angular-socket-io-parser-4.2.7
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate-and-verify:
+    if: ${{ !contains(github.event.head_commit.message, '[lockfile-regenerated]') }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: angular
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: automation/angular-socket-io-parser-4.2.7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Update only socket.io-parser in legacy lockfile
+        run: |
+          npm install --global npm@8.19.4
+          rm -rf node_modules
+          npm update socket.io-parser --package-lock-only --lockfile-version=1 --ignore-scripts
+      - name: Verify vulnerable socket.io-parser is removed
+        run: |
+          node <<'NODE'
+          const lock = require('./package-lock.json');
+          const versions = [];
+          const walk = deps => {
+            for (const [name, value] of Object.entries(deps || {})) {
+              if (name === 'socket.io-parser') versions.push(value.version);
+              walk(value.dependencies);
+            }
+          };
+          walk(lock.dependencies);
+          console.log('socket.io-parser versions:', versions.join(', '));
+          if (!versions.includes('4.2.7') || versions.includes('4.2.2')) process.exit(1);
+          NODE
+      - name: Verify clean install
+        run: npm ci
+      - name: Verify Angular build
+        run: npm run build
+      - name: Commit validated lockfile
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add angular/package-lock.json
+          git rm .github/workflows/regenerate-angular-socket-io-parser-lockfile.yml
+          git commit -m "fix(deps): update socket.io-parser to 4.2.7 [lockfile-regenerated]"
+          git push origin HEAD:automation/angular-socket-io-parser-4.2.7
