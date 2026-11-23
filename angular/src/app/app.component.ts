@@ -21,6 +21,7 @@ interface TodoItems {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -28,7 +29,7 @@ interface TodoItems {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy {
-  $todo: StoreState<Todo> = DefaultStoreState;
+  $todo: StoreState<Todo> = DefaultStoreState(todoStore);
   todoItems: TodoItems = {active: [], inactive: []};
   searchTerm = '';
   $unsubscribeFromTodoStore: UnSubscriber = () => {};

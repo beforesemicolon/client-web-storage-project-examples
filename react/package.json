@@ -3,32 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.11",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "client-web-storage": "^1.7.5",
     "flatlist-react": "^1.5.9",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.9.4",
-    "web-vitals": "^2.1.4"
+    "react-dom": "^18.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "start": "vite --port 3000",
+    "build": "tsc --noEmit && vite build",
+    "test": "tsc --noEmit"
   },
   "browserslist": {
     "production": [
@@ -43,6 +28,9 @@
     ]
   },
   "devDependencies": {
-    "sass": "^1.57.1"
+    "@types/node": "^22.12.0",
+    "sass": "^1.57.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.8"
   }
 }

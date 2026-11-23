@@ -4,6 +4,7 @@ import { Todo, TodoStatus } from '../../service/todo.service';
 import { todoStore } from '../../stores/todo.store';
 
 @Component({
+  standalone: false,
   selector: 'todo-item[todo]',
   templateUrl: './todo-item.component.html',
   styleUrls: ['./todo-item.component.scss'],
