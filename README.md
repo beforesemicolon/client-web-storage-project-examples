@@ -1,32 +1,38 @@
 # Client Web Storage Project Examples
-Demonstrates how to use the `client-web-storage` package with different UI frameworks.
 
-## Setup
+These examples use `client-web-storage` to build the same todo app in React
+and Angular. Both apps use a shared local Express API.
 
-### 1 - Run Server
-There is a server which handles the API requests which the projects need.
+Use Node.js 22.22.3 (or a later supported Node 22 or Node 24 LTS release).
+Install each example with `npm ci` to use its checked-in dependency versions.
 
-Open on terminal tab and run the following commands:
-```bash
-# from the project root
+## Start the API
+
+From the repository root, run:
+
+```sh
 cd server
-
-npm install
-
-npm start # runs server on port 4500
-```
-
-### 2 - Run Projects
-The same todo app is created in:
-- React
-- Angular
-
-In a separate terminal tab run the following commands:
-```bash
-# from the project root
-cd PROJECT_FOLDER_NAME_YOU_WANT # react | angular
-
-npm install
-
+npm ci
 npm start
 ```
+
+The API is available at `http://localhost:4500`. It writes demo todo data to
+`server/db/todo.db.doc.json`. Use this server locally; it is not an
+authenticated production service.
+
+## Start a frontend
+
+Open another terminal and run:
+
+```sh
+cd react # or: cd angular
+npm ci
+npm start
+```
+
+- React uses Vite at `http://localhost:3000`.
+- Angular uses Angular CLI at `http://localhost:4200`.
+
+Run `npm run build` in either frontend to build the example. Both examples
+should let you create and complete a todo, then reload to see the saved
+status.
